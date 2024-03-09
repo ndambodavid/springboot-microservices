@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-//@Transactional
+@Transactional
 @Slf4j
 public class OrderService {
 
@@ -30,15 +30,17 @@ public class OrderService {
 //    private final ApplicationEventPublisher applicationEventPublisher;
 
     public String placeOrder(OrderRequest orderRequest) {
-//        Order order = new Order();
-//        order.setOrderNumber(UUID.randomUUID().toString());
+        Order order = new Order();
+        order.setOrderNumber(UUID.randomUUID().toString());
+
+        List<OrderLineItems> orderLineItems = orderRequest.getOrderLineItemsDtoList()
+                .stream()
+                .map(this::mapToDto)
+                .toList();
 //
-//        List<OrderLineItems> orderLineItems = orderRequest.getOrderLineItemsDtoList()
-//                .stream()
-//                .map(this::mapToDto)
-//                .toList();
-//
-//        order.setOrderLineItemsList(orderLineItems);
+        order.setOrderLineItemsList(orderLineItems);
+
+        orderRepository.save(order);
 //
 //        List<String> skuCodes = order.getOrderLineItemsList().stream()
 //                .map(OrderLineItems::getSkuCode)
